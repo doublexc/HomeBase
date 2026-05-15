@@ -14,7 +14,7 @@ import {
 //  🔧 ตั้งค่า Firebase ของคุณที่นี่
 // ──────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyBnbXPyLcqCnRdsK3zvkKXbvXRSfHOwZdU",
+  apiKey: "dummy api",
   authDomain: "homebase-ddfd3.firebaseapp.com",
   projectId: "homebase-ddfd3",
   storageBucket: "homebase-ddfd3.firebasestorage.app",
