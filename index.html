@@ -171,23 +171,33 @@
   async function init() {
     // ตรวจสอบสถานะการล็อกอินจาก Firebase โดยตรง (ย้ายเครื่องก็ยังอยู่ถ้าใช้เมลเดิม)
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // เช็คว่ามีข้อมูลในคอลเลกชัน users หรือยัง
-        const snap = await getDoc(doc(db, 'users', user.uid));
-        if (snap.exists()) {
-          currentUser = { uid: user.uid, displayName: snap.data().displayName };
-          document.getElementById('header-username').textContent = currentUser.displayName;
-          showPage('page-home');
-          loadMembers();
-        } else {
-          // ถ้าล็อกอินสำเร็จแต่ยังไม่มีข้อมูล (กรณีสมัครใหม่ด้วย Google)
-          showPage('page-register');
-          // ดึงชื่อจาก Google มาใส่รอไว้ให้เลย
-          document.getElementById('reg-displayname').value = user.displayName;
-        }
-      } else {
-        showPage('page-login');
-      }
+  // 1. ถ้าไม่มี user ล็อกอินเลย ให้ไปหน้า login ทันที
+  if (!user) {
+    showPage('page-login');
+    return;
+  }
+
+  // 2. ถ้ามี user แล้ว (กำลังโหลดข้อมูลจาก Firestore)
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    
+    if (snap.exists()) {
+      // เคส: เป็นสมาชิกเก่า -> เข้าหน้า Home
+      currentUser = { uid: user.uid, displayName: snap.data().displayName };
+      document.getElementById('header-username').textContent = currentUser.displayName;
+      showPage('page-home');
+      loadMembers();
+    } else {
+      // เคส: เพิ่งเคยล็อกอิน Google ครั้งแรก -> ให้ไปลงทะเบียนโค้ดเชิญก่อน
+      showPage('page-register');
+      document.getElementById('reg-displayname').value = user.displayName || "";
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    showToast("เกิดข้อผิดพลาดในการโหลดข้อมูล");
+    showPage('page-login'); // ถ้าโหลดพลาดจริงๆ ให้กลับไปตั้งหลักที่หน้า login
+  }
+});
     });
 
     setupButtons();
