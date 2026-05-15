@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomeVault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Login Page -->
+    <div id="page-login" class="page active">
+      <div class="login-bg">
+        <div class="login-card">
+          <div class="logo-wrap">
+            <span class="logo-icon">🏠</span>
+            <h1 class="logo-text">HomeVault</h1>
+            <p class="logo-sub">พื้นที่ส่วนตัวของคนในบ้าน</p>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="login-username" placeholder="ชื่อผู้ใช้" autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="รหัสผ่าน" autocomplete="current-password" />
+          </div>
+          <div id="login-error" class="error-msg hidden"></div>
+          <button class="btn-primary" id="btn-login">เข้าสู่ระบบ</button>
+          <div class="divider">ยังไม่มีบัญชี?</div>
+          <button class="btn-secondary" id="btn-goto-register">สมัครด้วยโค้ดเชิญ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="page-register" class="page">
+      <div class="login-bg">
+        <div class="login-card">
+          <div class="logo-wrap">
+            <span class="logo-icon">🔑</span>
+            <h1 class="logo-text">สมัครสมาชิก</h1>
+            <p class="logo-sub">ต้องมีโค้ดเชิญจาก Admin</p>
+          </div>
+          <div class="form-group">
+            <label>โค้ดเชิญ</label>
+            <input type="text" id="reg-invite" placeholder="กรอกโค้ดเชิญ" />
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="reg-username" placeholder="ตั้งชื่อผู้ใช้" />
+          </div>
+          <div class="form-group">
+            <label>ชื่อที่แสดง</label>
+            <input type="text" id="reg-displayname" placeholder="ชื่อเล่น / ชื่อจริง" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="reg-password" placeholder="ตั้งรหัสผ่าน" />
+          </div>
+          <div id="reg-error" class="error-msg hidden"></div>
+          <button class="btn-primary" id="btn-register">สมัครสมาชิก</button>
+          <button class="btn-ghost" id="btn-goto-login">← กลับไปเข้าสู่ระบบ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="page-home" class="page">
+      <header class="app-header">
+        <div class="header-left">
+          <span class="header-logo">🏠</span>
+          <span class="header-title">HomeVault</span>
+        </div>
+        <div class="header-right">
+          <span class="header-user" id="header-username"></span>
+          <button class="btn-logout" id="btn-logout">ออก</button>
+        </div>
+      </header>
+      <main class="main-content">
+        <div class="section-title">สมาชิกในบ้าน</div>
+        <div class="members-grid" id="members-grid">
+          <!-- member cards rendered by JS -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Profile Page (member's vault) -->
+    <div id="page-profile" class="page">
+      <header class="app-header">
+        <div class="header-left">
+          <button class="btn-back" id="btn-back">←</button>
+          <span class="header-title" id="profile-header-name"></span>
+        </div>
+        <div class="header-right">
+          <button class="btn-logout" id="btn-logout2">ออก</button>
+        </div>
+      </header>
+      <main class="main-content">
+        <div class="profile-top">
+          <div class="avatar-big" id="profile-avatar"></div>
+          <div class="profile-info">
+            <div class="profile-name" id="profile-display-name"></div>
+            <div class="profile-username" id="profile-username-text"></div>
+          </div>
+          <button class="btn-add hidden" id="btn-add-item">+ เพิ่มรายการ</button>
+        </div>
+        <div class="items-list" id="items-list">
+          <!-- items rendered by JS -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal: Add/Edit Item -->
+    <div id="modal-item" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-title" id="modal-title">เพิ่มรายการใหม่</div>
+        <div class="form-group">
+          <label>ชื่อรายการ</label>
+          <input type="text" id="item-name" placeholder="เช่น Netflix, Email" />
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="item-username" placeholder="ชื่อผู้ใช้ / Email" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="text" id="item-password" placeholder="รหัสผ่าน" />
+        </div>
+        <div class="form-group">
+          <label>หมายเหตุ</label>
+          <textarea id="item-note" placeholder="บันทึกเพิ่มเติม..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>การมองเห็น</label>
+          <div class="toggle-row">
+            <label class="toggle-label" id="visibility-label">🔒 Private</label>
+            <label class="switch">
+              <input type="checkbox" id="item-public" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-ghost" id="btn-cancel-item">ยกเลิก</button>
+          <button class="btn-primary" id="btn-save-item">บันทึก</button>
+        </div>
+        <button class="btn-danger hidden" id="btn-delete-item">🗑 ลบรายการนี้</button>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="js/firebase-config.js"></script>
+</body>
+</html>
