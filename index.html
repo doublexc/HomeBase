@@ -8,158 +8,128 @@
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f5f0eb; --surface: #fffdf9; --surface2: #f0ece5; --border: #e2d9ce;
-      --text: #2c2420; --text-secondary: #7a6a60; --accent: #c0622f; --accent-light: #f5e6de;
-      --accent-dark: #9e4f25; --green: #3a7d44; --green-light: #e3f0e5; --red: #c0392b;
-      --red-light: #fdecea; --shadow: 0 2px 12px rgba(44,36,32,0.08);
-      --shadow-lg: 0 8px 32px rgba(44,36,32,0.14); --radius: 14px; --radius-sm: 8px;
+      --bg: #f5f0eb; --surface: #fffdf9; --border: #e2d9ce;
+      --text: #2c2420; --text-secondary: #7a6a60; --accent: #c0622f; 
+      --accent-light: #f5e6de; --accent-dark: #9e4f25; --green: #3a7d44; 
+      --green-light: #e3f0e5; --red: #c0392b; --shadow: 0 2px 12px rgba(44,36,32,0.08);
+      --radius: 14px; --radius-sm: 8px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+    body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
     .page { display: none; min-height: 100vh; }
     .page.active { display: block; }
-    .login-bg { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(ellipse at 20% 20%, #f7e6d8 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, #e8ddd4 0%, transparent 60%), var(--bg); }
-    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px 36px; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); animation: fadeUp 0.4s ease; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .login-bg { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px 36px; width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
     .logo-wrap { text-align: center; margin-bottom: 32px; }
-    .logo-icon { font-size: 40px; display: block; margin-bottom: 8px; }
-    .logo-text { font-family: 'Kanit', sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
-    .logo-sub { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+    .logo-text { font-family: 'Kanit', sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); }
     .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); font-family: 'Sarabun', sans-serif; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
-    .btn-primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-    .btn-primary:hover { background: var(--accent-dark); }
-    .btn-ghost { background: transparent; color: var(--text-secondary); border: none; font-family: 'Sarabun', sans-serif; font-size: 14px; cursor: pointer; padding: 8px; margin-top: 8px; width: 100%; }
-    .btn-danger { width: 100%; padding: 11px; background: transparent; color: var(--red); border: 1.5px solid var(--red); border-radius: var(--radius-sm); font-size: 14px; cursor: pointer; margin-top: 12px; }
-    .app-header { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 58px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 8px rgba(44,36,32,0.06); }
-    .header-title { font-family: 'Kanit', sans-serif; font-size: 17px; font-weight: 600; }
-    .main-content { max-width: 680px; margin: 0 auto; padding: 24px 20px 60px; }
-    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
-    .member-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 16px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
-    .member-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700; color: var(--accent); margin: 0 auto 12px; }
-    .profile-top { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-    .avatar-big { width: 64px; height: 64px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
-    .item-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); margin-bottom: 10px; }
-    .item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(44,36,32,0.45); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
-    .modal-card { background: var(--surface); border-radius: 20px 20px 0 0; padding: 28px 24px 36px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
-    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: 0.2s; }
-    .slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
-    input:checked + .slider { background: var(--green); }
-    input:checked + .slider::before { transform: translateX(20px); }
-    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; border-radius: 30px; padding: 10px 22px; font-size: 14px; z-index: 999; }
-    .btn-logout { background: transparent; border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; }
+    .btn-primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Kanit', sans-serif; font-size: 15px; cursor: pointer; }
+    .btn-ghost { background: transparent; color: var(--text-secondary); border: none; padding: 10px; cursor: pointer; width: 100%; }
+    .app-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .main-content { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .member-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; cursor: pointer; }
+    .member-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700; color: var(--accent); }
+    .item-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-card { background: var(--surface); border-radius: var(--radius); padding: 25px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; }
+    .hidden { display: none !important; }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 2000; }
     .toggle-row { display: flex; justify-content: space-between; align-items: center; }
+    .switch { position: relative; width: 40px; height: 22px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 34px; transition: .4s; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background: var(--green); }
+    input:checked + .slider:before { transform: translateX(18px); }
   </style>
 </head>
 <body>
-<div id="app">
-  <div id="page-login" class="page active">
-    <div class="login-bg">
-      <div class="login-card">
-        <div class="logo-wrap">
-          <span class="logo-icon">🏠</span>
-          <div class="logo-text">HomeVault</div>
-          <div class="logo-sub">ระบบเก็บข้อมูลสำหรับคนในบ้าน</div>
-        </div>
-        
-        <button class="btn-primary" id="btn-google-login" style="background: #df4a32; display: flex; align-items: center; justify-content: center; gap: 10px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.909 3.28-2.1 4.45-1.14 1.14-2.9 2.38-5.74 2.38-4.57 0-8.24-3.71-8.24-8.28s3.67-8.28 8.24-8.28c2.48 0 4.28.98 5.62 2.27l2.31-2.31C18.42 2.34 15.7 1 12.48 1 6.32 1 1.25 6.07 1.25 12.22s5.07 11.22 11.23 11.22c3.33 0 5.85-1.1 7.82-3.14 2.02-2.02 2.66-4.83 2.66-7.13 0-.68-.05-1.33-.14-1.95h-10.3z"/>
-          </svg>
-          เข้าใช้งานด้วย Google
-        </button>
 
-        <div style="text-align: center; margin-top: 20px; color: var(--text-secondary); font-size: 13px;">
-          * สำหรับสมาชิกในบ้านเท่านั้น
-        </div>
+<div id="page-login" class="page active">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="logo-wrap">
+        <span style="font-size: 40px;">🏠</span>
+        <div class="logo-text">HomeVault</div>
+        <div style="font-size: 13px; color: #7a6a60;">เข้าสู่ระบบสมาชิกในบ้าน</div>
       </div>
+      <button class="btn-primary" id="btn-google-login" style="background: #df4a32; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.909 3.28-2.1 4.45-1.14 1.14-2.9 2.38-5.74 2.38-4.57 0-8.24-3.71-8.24-8.28s3.67-8.28 8.24-8.28c2.48 0 4.28.98 5.62 2.27l2.31-2.31C18.42 2.34 15.7 1 12.48 1 6.32 1 1.25 6.07 1.25 12.22s5.07 11.22 11.23 11.22c3.33 0 5.85-1.1 7.82-3.14 2.02-2.02 2.66-4.83 2.66-7.13 0-.68-.05-1.33-.14-1.95h-10.3z"/></svg>
+        เข้าด้วย Google
+      </button>
     </div>
   </div>
-
-  <div id="page-register" class="page">
-    <div class="login-bg">
-      <div class="login-card">
-        <div class="logo-wrap">
-          <span class="logo-icon">🔑</span>
-          <div class="logo-text">ลงทะเบียนใหม่</div>
-          <div class="logo-sub">กรุณากรอกข้อมูลเพื่อยืนยันตัวตน</div>
-        </div>
-        <div class="form-group">
-          <label>โค้ดเชิญ</label>
-          <input type="text" id="reg-invite" placeholder="กรอกโค้ดเชิญจากแอดมิน">
-        </div>
-        <div class="form-group">
-          <label>ชื่อที่แสดง (ชื่อเล่น)</label>
-          <input type="text" id="reg-displayname" placeholder="เช่น แม่, พ่อ, พี่เอ">
-        </div>
-        <button class="btn-primary" id="btn-register-confirm">ยืนยันการลงทะเบียน</button>
-        <button class="btn-ghost" id="btn-logout-reg">← ออกจากระบบ</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="page-home" class="page">
-    <header class="app-header">
-      <div class="header-title">🏠 HomeVault</div>
-      <div id="header-username" style="font-size: 14px; font-weight: 600;"></div>
-      <button class="btn-logout" id="btn-logout">ออก</button>
-    </header>
-    <main class="main-content">
-      <div style="margin-bottom: 16px; font-weight: 600; color: var(--text-secondary);">สมาชิกในบ้าน</div>
-      <div class="members-grid" id="members-grid"></div>
-    </main>
-  </div>
-
-  <div id="page-profile" class="page">
-    <header class="app-header">
-      <button id="btn-back" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
-      <div id="profile-header-name" class="header-title"></div>
-      <button class="btn-logout" id="btn-logout2">ออก</button>
-    </header>
-    <main class="main-content">
-      <div class="profile-top">
-        <div class="avatar-big" id="profile-avatar"></div>
-        <div class="profile-info">
-          <div id="profile-display-name" style="font-weight: 700; font-size: 18px;"></div>
-        </div>
-        <button class="btn-primary hidden" id="btn-add-item" style="width: auto; padding: 8px 16px;">+ เพิ่ม</button>
-      </div>
-      <div id="items-list"></div>
-    </main>
-  </div>
-
-  <div id="modal-item" class="modal-overlay hidden">
-    <div class="modal-card">
-      <div style="font-family:'Kanit'; font-size:20px; font-weight:600; margin-bottom:20px;" id="modal-title">เพิ่มรายการ</div>
-      <div class="form-group"><label>ชื่อรายการ *</label><input type="text" id="item-name"></div>
-      <div class="form-group"><label>Username</label><input type="text" id="item-username"></div>
-      <div class="form-group"><label>Password</label><input type="text" id="item-password"></div>
-      <div class="form-group"><label>หมายเหตุ</label><textarea id="item-note"></textarea></div>
-      <div class="form-group">
-        <div class="toggle-row">
-          <span id="visibility-label">🔒 Private (เห็นคนเดียว)</span>
-          <label class="switch"><input type="checkbox" id="item-public"><span class="slider"></span></label>
-        </div>
-      </div>
-      <div style="display:flex; gap:10px; margin-top:20px;">
-        <button class="btn-ghost" id="btn-cancel-item" style="margin:0;">ยกเลิก</button>
-        <button class="btn-primary" id="btn-save-item">บันทึก</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="toast" class="toast hidden"></div>
 </div>
+
+<div id="page-register" class="page">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="logo-wrap"><span style="font-size: 40px;">🔑</span><div class="logo-text">ลงทะเบียน</div></div>
+      <div class="form-group"><label>โค้ดเชิญ</label><input type="text" id="reg-invite"></div>
+      <div class="form-group"><label>ชื่อเล่นของคุณ</label><input type="text" id="reg-displayname"></div>
+      <button class="btn-primary" id="btn-register-confirm">ยืนยัน</button>
+      <button class="btn-ghost" id="btn-logout-reg">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-home" class="page">
+  <header class="app-header">
+    <div class="header-title">HomeVault</div>
+    <div id="header-username" style="font-size:14px;"></div>
+    <button id="btn-logout" style="font-size: 12px; padding: 4px 8px;">ออก</button>
+  </header>
+  <main class="main-content">
+    <div style="margin-bottom: 15px; font-weight: 600;">สมาชิกในบ้าน</div>
+    <div class="members-grid" id="members-grid"></div>
+  </main>
+</div>
+
+<div id="page-profile" class="page">
+  <header class="app-header">
+    <button id="btn-back" style="background:none; border:none; font-size: 20px;">←</button>
+    <div id="profile-header-name"></div>
+    <div style="width: 30px;"></div>
+  </header>
+  <main class="main-content">
+    <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+      <div id="profile-avatar" class="member-avatar" style="margin:0; width:60px; height:60px; font-size:24px;"></div>
+      <div id="profile-display-name" style="font-weight:700; font-size:20px;"></div>
+      <button id="btn-add-item" class="hidden" style="margin-left:auto; background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:8px;">+ เพิ่ม</button>
+    </div>
+    <div id="items-list"></div>
+  </main>
+</div>
+
+<div id="modal-item" class="modal-overlay hidden">
+  <div class="modal-card">
+    <h3 style="margin-bottom: 20px;" id="modal-title">เพิ่มรายการ</h3>
+    <div class="form-group"><label>ชื่อรายการ *</label><input type="text" id="item-name"></div>
+    <div class="form-group"><label>Username</label><input type="text" id="item-username"></div>
+    <div class="form-group"><label>Password</label><input type="text" id="item-password"></div>
+    <div class="form-group"><label>หมายเหตุ</label><textarea id="item-note"></textarea></div>
+    <div class="form-group">
+      <div class="toggle-row">
+        <span>🔒 Private</span>
+        <label class="switch"><input type="checkbox" id="item-public"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button id="btn-cancel-item" style="flex:1; padding:10px; border:none; border-radius:8px;">ยกเลิก</button>
+      <button id="btn-save-item" class="btn-primary" style="flex:1;">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, addDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBnbXPyLcqCnRdsK3zvkKXbvXRSfHOwZdU",
@@ -177,19 +147,14 @@
   const provider = new GoogleAuthProvider();
 
   let currentUser = null; 
-  let viewingUid = null; 
-  let editingItemId = null;
+  let viewingUid = null;
 
   function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
   function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500); }
   function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  // ตรวจสอบสถานะล็อกอิน
   onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      showPage('page-login');
-      return;
-    }
+    if (!user) { showPage('page-login'); return; }
     try {
       const snap = await getDoc(doc(db, 'users', user.uid));
       if (snap.exists()) {
@@ -201,24 +166,17 @@
         showPage('page-register');
         document.getElementById('reg-displayname').value = user.displayName || "";
       }
-    } catch (e) {
-      showPage('page-login');
-    }
+    } catch (e) { showPage('page-login'); }
   });
 
-  // ตั้งค่าปุ่มกด
   document.getElementById('btn-google-login').onclick = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (e) {
-      alert("ล็อกอินผิดพลาด: " + e.message);
-    }
+    try { await signInWithPopup(auth, provider); } catch (e) { alert("Error: " + e.message); }
   };
 
   document.getElementById('btn-register-confirm').onclick = async () => {
     const inv = document.getElementById('reg-invite').value.trim().toUpperCase();
     const d = document.getElementById('reg-displayname').value.trim();
-    if(!auth.currentUser) return showToast("กรุณาล็อกอินก่อน");
+    if(!auth.currentUser || !d) return showToast("ข้อมูลไม่ครบ");
     try {
       const iSnap = await getDoc(doc(db, 'settings', 'inviteCodes'));
       if(!iSnap.exists() || !iSnap.data()[inv]) throw new Error('โค้ดเชิญผิด');
@@ -227,41 +185,39 @@
     } catch(e) { showToast(e.message); }
   };
 
-  document.getElementById('btn-logout').onclick = 
-  document.getElementById('btn-logout2').onclick = 
-  document.getElementById('btn-logout-reg').onclick = () => { auth.signOut(); location.reload(); };
+  const logoutFunc = () => { signOut(auth).then(() => location.reload()); };
+  document.getElementById('btn-logout').onclick = logoutFunc;
+  document.getElementById('btn-logout-reg').onclick = logoutFunc;
 
   document.getElementById('btn-back').onclick = () => { showPage('page-home'); loadMembers(); };
-  
-  document.getElementById('btn-add-item').onclick = () => { 
-    editingItemId = null; document.getElementById('modal-title').textContent = 'เพิ่มรายการ'; document.getElementById('modal-item').classList.remove('hidden'); 
-  };
+  document.getElementById('btn-add-item').onclick = () => { document.getElementById('modal-item').classList.remove('hidden'); };
   document.getElementById('btn-cancel-item').onclick = () => document.getElementById('modal-item').classList.add('hidden');
 
   document.getElementById('btn-save-item').onclick = async () => {
+    const name = document.getElementById('item-name').value;
+    if(!name) return showToast("ใส่ชื่อรายการด้วย");
     const payload = { 
-      name: document.getElementById('item-name').value, 
-      username: document.getElementById('item-username').value, 
+      name: name, username: document.getElementById('item-username').value, 
       password: document.getElementById('item-password').value, 
       note: document.getElementById('item-note').value, 
-      public: document.getElementById('item-public').checked 
+      public: document.getElementById('item-public').checked,
+      createdAt: Date.now()
     };
     try {
-      const col = collection(db, 'users', currentUser.uid, 'items');
-      payload.createdAt = Date.now(); 
-      await addDoc(col, payload);
+      await addDoc(collection(db, 'users', currentUser.uid, 'items'), payload);
       document.getElementById('modal-item').classList.add('hidden');
+      showToast("บันทึกแล้ว");
       loadItems(currentUser.uid, true);
     } catch(e) { alert(e.message); }
   };
 
   async function loadMembers() {
-    const grid = document.getElementById('members-grid'); grid.innerHTML = 'โหลด...';
+    const grid = document.getElementById('members-grid'); grid.innerHTML = '...';
     const snap = await getDocs(collection(db, 'users')); 
     grid.innerHTML = '';
     snap.forEach(d => {
       const card = document.createElement('div'); card.className = 'member-card';
-      card.innerHTML = `<div class="member-avatar">${d.data().displayName[0]}</div><div style="font-size:14px; font-weight:600;">${d.data().displayName}</div>`;
+      card.innerHTML = `<div class="member-avatar">${d.data().displayName[0]}</div><div style="font-weight:600;">${d.data().displayName}</div>`;
       card.onclick = () => openProfile(d.id, d.data().displayName); 
       grid.appendChild(card);
     });
@@ -278,15 +234,13 @@
   }
 
   async function loadItems(uid, isOwner) {
-    const list = document.getElementById('items-list'); list.innerHTML = 'โหลด...';
+    const list = document.getElementById('items-list'); list.innerHTML = '...';
     let q = query(collection(db, 'users', uid, 'items'), orderBy('createdAt', 'desc'));
     if(!isOwner) q = query(collection(db, 'users', uid, 'items'), where('public', '==', true));
     const snap = await getDocs(q); list.innerHTML = '';
     snap.forEach(d => {
       const item = d.data(); const card = document.createElement('div'); card.className = 'item-card';
-      card.innerHTML = `<div class="item-header"><b>${esc(item.name)}</b></div>
-                        <div style="font-size:13px; color:var(--text-secondary);">User: ${esc(item.username)}</div>
-                        <div style="font-size:13px; color:var(--text-secondary);">Pass: ${esc(item.password)}</div>`;
+      card.innerHTML = `<b>${esc(item.name)}</b><br><small>U: ${esc(item.username)} | P: ${esc(item.password)}</small>`;
       list.appendChild(card);
     });
   }
