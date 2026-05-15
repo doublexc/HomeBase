@@ -107,14 +107,20 @@
   </div></div>
   <div id="toast" class="toast hidden"></div>
 </div>
+<div id="page-login" class="page">
+  <h2>เข้าสู่ระบบ</h2>
+  <button id="btn-google-login" style="background: #db4437; color: white; padding: 15px; border: none; border-radius: 8px; width: 100%;">
+    เข้าใช้งานด้วย Google
+  </button>
+  <p style="text-align: center; color: #666;">(สำหรับคนในบ้านเท่านั้น)</p>
+</div>
+
 
 <script type="module">
-  // 1. นำเข้าคำสั่งที่จำเป็น (เพิ่ม Auth เข้ามาให้แล้ว)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, addDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  // 2. ตั้งค่า Firebase (ใช้ค่าเดิมของคุณ)
   const firebaseConfig = {
     apiKey: "AIzaSyBnbXPyLcqCnRdsK3zvkKXbvXRSfHOwZdU",
     authDomain: "homebase-ddfd3.firebaseapp.com",
@@ -125,141 +131,149 @@
     measurementId: "G-FQZ4H2KV95"
   };
 
-  // 3. เริ่มต้นการทำงานของระบบ
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const auth = getAuth(app); // สร้างตัวจัดการการล็อกอิน
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
   let currentUser = null; 
   let viewingUid = null; 
   let editingItemId = null;
 
-  // ฟังก์ชันช่วยเหลือ (ไม่ต้องแก้)
-  async function simpleHash(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join(''); }
   function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
   function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500); }
-  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  // 4. ฟังก์ชันเริ่มต้นแอป (ที่เคยงง ผมรวมมาให้แล้ว)
   async function init() {
-    // --- ส่วนที่เพิ่มใหม่: แอบล็อกอินเงียบๆ เพื่อให้ Rules ยอมให้เราอ่านข้อมูล ---
-    try {
-      await signInAnonymously(auth);
-      console.log("เข้าสู่ระบบแบบไม่ระบุตัวตนสำเร็จ");
-    } catch (e) {
-      console.error("ล็อกอินเงียบพลาด:", e.message);
-    }
+    // ตรวจสอบสถานะการล็อกอินจาก Firebase โดยตรง (ย้ายเครื่องก็ยังอยู่ถ้าใช้เมลเดิม)
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // เช็คว่ามีข้อมูลในคอลเลกชัน users หรือยัง
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        if (snap.exists()) {
+          currentUser = { uid: user.uid, displayName: snap.data().displayName };
+          document.getElementById('header-username').textContent = currentUser.displayName;
+          showPage('page-home');
+          loadMembers();
+        } else {
+          // ถ้าล็อกอินสำเร็จแต่ยังไม่มีข้อมูล (กรณีสมัครใหม่ด้วย Google)
+          showPage('page-register');
+          // ดึงชื่อจาก Google มาใส่รอไว้ให้เลย
+          document.getElementById('reg-displayname').value = user.displayName;
+        }
+      } else {
+        showPage('page-login');
+      }
+    });
 
-    // เช็คว่าเคยล็อกอินชื่อผู้ใช้ไว้ไหม
-    const s = sessionStorage.getItem('hv_user'); 
-    if(s) { 
-      currentUser = JSON.parse(s); 
-      document.getElementById('header-username').textContent = currentUser.displayName; 
-      showPage('page-home'); 
-      loadMembers(); 
-    } else { 
-      showPage('page-login'); 
-    }
-
-    // ตั้งค่าปุ่มกดต่างๆ
     setupButtons();
   }
 
-  // รวมปุ่มกดทั้งหมดไว้ตรงนี้ จะได้ไม่รก
   function setupButtons() {
-    // ปุ่ม Login
-    document.getElementById('btn-login').onclick = async () => {
-      const u = document.getElementById('login-username').value.trim(); 
-      const p = document.getElementById('login-password').value;
+    // ปุ่มเข้าสู่ระบบด้วย Google (ง่ายที่สุดสำหรับคนแก่)
+    document.getElementById('btn-google-login').onclick = async () => {
       try {
-        const snap = await getDoc(doc(db, 'users', u.toLowerCase())); 
-        if(!snap.exists()) throw new Error('ไม่พบผู้ใช้');
-        if(snap.data().passwordHash !== await simpleHash(p)) throw new Error('รหัสผิด');
-        currentUser = { uid: u.toLowerCase(), displayName: snap.data().displayName }; 
-        sessionStorage.setItem('hv_user', JSON.stringify(currentUser));
-        location.reload();
-      } catch(e) { 
-        document.getElementById('login-error').textContent = e.message; 
-        document.getElementById('login-error').classList.remove('hidden'); 
+        await signInWithPopup(auth, provider);
+      } catch (e) {
+        showToast("ล็อกอินผิดพลาด: " + e.message);
       }
     };
 
-    // ปุ่มสมัครสมาชิก
-    document.getElementById('btn-register').onclick = async () => {
-      const inv = document.getElementById('reg-invite').value.trim().toUpperCase(); 
-      const u = document.getElementById('reg-username').value.trim().toLowerCase();
-      const d = document.getElementById('reg-displayname').value.trim(); 
-      const p = document.getElementById('reg-password').value;
+    // ปุ่มยืนยันการสมัครสมาชิก (ใช้หลังจากล็อกอิน Google ครั้งแรก)
+    document.getElementById('btn-register-confirm').onclick = async () => {
+      const inv = document.getElementById('reg-invite').value.trim().toUpperCase();
+      const d = document.getElementById('reg-displayname').value.trim();
+      
+      if(!auth.currentUser) return showToast("กรุณาล็อกอิน Google ก่อน");
+
       try {
-        const iSnap = await getDoc(doc(db, 'settings', 'inviteCodes')); 
+        const iSnap = await getDoc(doc(db, 'settings', 'inviteCodes'));
         if(!iSnap.exists() || !iSnap.data()[inv]) throw new Error('โค้ดเชิญผิด');
-        
-        // ตอนสมัคร ให้แอบเก็บเลข UID ของเครื่องไว้ด้วย เพื่อเอาไปใช้ใน Rules
-        await setDoc(doc(db, 'users', u), { 
-          displayName: d, 
-          passwordHash: await simpleHash(p), 
-          createdAt: Date.now(),
-          authUid: auth.currentUser.uid 
+
+        // บันทึกข้อมูลโดยใช้ UID ของ Firebase เป็นชื่อเอกสาร (ID นี้จะคงที่ตลอดไปสำหรับเมลนั้น)
+        await setDoc(doc(db, 'users', auth.currentUser.uid), {
+          displayName: d,
+          email: auth.currentUser.email,
+          createdAt: Date.now()
         });
-        showToast('สมัครสำเร็จ!'); 
-        showPage('page-login');
-      } catch(e) { 
-        document.getElementById('reg-error').textContent = e.message; 
-        document.getElementById('reg-error').classList.remove('hidden'); 
+        
+        showToast('ลงทะเบียนสำเร็จ!');
+        location.reload();
+      } catch(e) {
+        showToast(e.message);
       }
     };
 
-    // ปุ่มอื่นๆ (Logout, Back, etc.)
-    document.getElementById('btn-logout').onclick = document.getElementById('btn-logout2').onclick = () => { sessionStorage.removeItem('hv_user'); location.reload(); };
+    document.getElementById('btn-logout').onclick = () => { auth.signOut(); location.reload(); };
     document.getElementById('btn-back').onclick = () => { showPage('page-home'); loadMembers(); };
-    document.getElementById('btn-goto-register').onclick = () => showPage('page-register');
-    document.getElementById('btn-goto-login').onclick = () => showPage('page-login');
-    document.getElementById('btn-add-item').onclick = () => { editingItemId = null; document.getElementById('modal-title').textContent = 'เพิ่มรายการ'; document.getElementById('modal-item').classList.remove('hidden'); };
-    document.getElementById('btn-cancel-item').onclick = () => document.getElementById('modal-item').classList.add('hidden');
-
-    // ปุ่มบันทึกไอเทม
+    
+    document.getElementById('btn-add-item').onclick = () => { 
+      editingItemId = null; 
+      document.getElementById('modal-title').textContent = 'เพิ่มรายการ'; 
+      document.getElementById('modal-item').classList.remove('hidden'); 
+    };
+    
     document.getElementById('btn-save-item').onclick = async () => {
-      const payload = { name: document.getElementById('item-name').value, username: document.getElementById('item-username').value, password: document.getElementById('item-password').value, note: document.getElementById('item-note').value, public: document.getElementById('item-public').checked };
+      const payload = { 
+        name: document.getElementById('item-name').value, 
+        username: document.getElementById('item-username').value, 
+        password: document.getElementById('item-password').value, 
+        note: document.getElementById('item-note').value, 
+        public: document.getElementById('item-public').checked 
+      };
+      // ใช้ currentUser.uid (ซึ่งตอนนี้คือ UID ของ Firebase) ในการเก็บไอเทม
       const col = collection(db, 'users', currentUser.uid, 'items');
-      if(editingItemId) await updateDoc(doc(col, editingItemId), payload); 
+      if(editingItemId) await updateDoc(doc(col, editingItemId), payload);
       else { payload.createdAt = Date.now(); await addDoc(col, payload); }
-      document.getElementById('modal-item').classList.add('hidden'); 
+      
+      document.getElementById('modal-item').classList.add('hidden');
       loadItems(currentUser.uid, true);
     };
   }
 
-  // ฟังก์ชันโหลดข้อมูล (คงเดิม)
   async function loadMembers() {
     const grid = document.getElementById('members-grid'); grid.innerHTML = 'โหลด...';
-    const snap = await getDocs(collection(db, 'users')); grid.innerHTML = '';
+    const snap = await getDocs(collection(db, 'users')); 
+    grid.innerHTML = '';
     snap.forEach(d => {
       const card = document.createElement('div'); card.className = 'member-card';
       card.innerHTML = `<div class="member-avatar">${d.data().displayName[0]}</div><div>${d.data().displayName}</div>`;
-      card.onclick = () => openProfile(d.id, d.data().displayName); grid.appendChild(card);
+      card.onclick = () => openProfile(d.id, d.data().displayName); 
+      grid.appendChild(card);
     });
   }
 
   async function openProfile(uid, name) {
-    viewingUid = uid; const isOwner = currentUser.uid === uid;
-    document.getElementById('profile-header-name').textContent = name; document.getElementById('profile-display-name').textContent = name;
+    viewingUid = uid; 
+    const isOwner = currentUser && currentUser.uid === uid;
+    document.getElementById('profile-header-name').textContent = name;
+    document.getElementById('profile-display-name').textContent = name;
     document.getElementById('profile-avatar').textContent = name[0];
-    if(isOwner) document.getElementById('btn-add-item').classList.remove('hidden'); else document.getElementById('btn-add-item').classList.add('hidden');
-    showPage('page-profile'); loadItems(uid, isOwner);
+    
+    if(isOwner) document.getElementById('btn-add-item').classList.remove('hidden'); 
+    else document.getElementById('btn-add-item').classList.add('hidden');
+    
+    showPage('page-profile'); 
+    loadItems(uid, isOwner);
   }
 
   async function loadItems(uid, isOwner) {
     const list = document.getElementById('items-list'); list.innerHTML = 'โหลด...';
     let q = query(collection(db, 'users', uid, 'items'), orderBy('createdAt', 'desc'));
     if(!isOwner) q = query(collection(db, 'users', uid, 'items'), where('public', '==', true));
-    const snap = await getDocs(q); list.innerHTML = '';
+    
+    const snap = await getDocs(q); 
+    list.innerHTML = '';
     snap.forEach(d => {
-      const item = d.data(); const card = document.createElement('div'); card.className = 'item-card';
-      card.innerHTML = `<div class="item-header"><b>${esc(item.name)}</b> <span class="item-badge ${item.public?'badge-public':'badge-private'}">${item.public?'🌐':'🔒'}</span></div><div>User: ${esc(item.username)}</div><div>Pass: ${esc(item.password)}</div>`;
+      const item = d.data(); 
+      const card = document.createElement('div'); card.className = 'item-card';
+      card.innerHTML = `<div class="item-header"><b>${esc(item.name)}</b></div>
+                        <div>User: ${esc(item.username)}</div>
+                        <div>Pass: ${esc(item.password)}</div>`;
       list.appendChild(card);
     });
   }
 
-  // เริ่มทำงานจริง
   init();
 </script>
 
