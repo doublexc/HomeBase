@@ -8,786 +8,199 @@
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f5f0eb;
-      --surface: #fffdf9;
-      --surface2: #f0ece5;
-      --border: #e2d9ce;
-      --text: #2c2420;
-      --text-secondary: #7a6a60;
-      --accent: #c0622f;
-      --accent-light: #f5e6de;
-      --accent-dark: #9e4f25;
-      --green: #3a7d44;
-      --green-light: #e3f0e5;
-      --red: #c0392b;
-      --red-light: #fdecea;
-      --shadow: 0 2px 12px rgba(44,36,32,0.08);
-      --shadow-lg: 0 8px 32px rgba(44,36,32,0.14);
-      --radius: 14px;
-      --radius-sm: 8px;
+      --bg: #f5f0eb; --surface: #fffdf9; --surface2: #f0ece5; --border: #e2d9ce;
+      --text: #2c2420; --text-secondary: #7a6a60; --accent: #c0622f; --accent-light: #f5e6de;
+      --accent-dark: #9e4f25; --green: #3a7d44; --green-light: #e3f0e5; --red: #c0392b;
+      --red-light: #fdecea; --shadow: 0 2px 12px rgba(44,36,32,0.08);
+      --shadow-lg: 0 8px 32px rgba(44,36,32,0.14); --radius: 14px; --radius-sm: 8px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Sarabun', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+    body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
     .page { display: none; min-height: 100vh; }
     .page.active { display: block; }
-
-    /* LOGIN */
-    .login-bg {
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px;
-      background:
-        radial-gradient(ellipse at 20% 20%, #f7e6d8 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, #e8ddd4 0%, transparent 60%),
-        var(--bg);
-    }
-    .login-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px 36px;
-      width: 100%; max-width: 400px;
-      box-shadow: var(--shadow-lg);
-      animation: fadeUp 0.4s ease;
-    }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(16px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .logo-wrap { text-align:center; margin-bottom:32px; }
-    .logo-icon { font-size:44px; display:block; margin-bottom:8px; }
-    .logo-text { font-family:'Kanit',sans-serif; font-size:28px; font-weight:700; color:var(--accent); }
-    .logo-sub  { color:var(--text-secondary); font-size:13px; margin-top:4px; }
-
-    /* FORMS */
-    .form-group { margin-bottom:18px; }
-    .form-group label {
-      display:block; font-size:12px; font-weight:600;
-      color:var(--text-secondary); margin-bottom:6px;
-      text-transform:uppercase; letter-spacing:0.6px;
-    }
-    .form-group input,
-    .form-group textarea {
-      width:100%; padding:11px 14px;
-      border:1.5px solid var(--border); border-radius:var(--radius-sm);
-      background:var(--bg); font-family:'Sarabun',sans-serif;
-      font-size:15px; color:var(--text); outline:none;
-      transition:border-color .2s, box-shadow .2s;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color:var(--accent);
-      box-shadow:0 0 0 3px var(--accent-light);
-    }
-    .form-group textarea { resize:vertical; min-height:72px; }
-
-    /* BUTTONS */
-    .btn-primary {
-      width:100%; padding:13px;
-      background:var(--accent); color:#fff; border:none;
-      border-radius:var(--radius-sm); font-family:'Kanit',sans-serif;
-      font-size:15px; font-weight:500; cursor:pointer;
-      transition:background .2s, transform .1s;
-    }
-    .btn-primary:hover   { background:var(--accent-dark); }
-    .btn-primary:active  { transform:scale(0.98); }
-    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-
-    .btn-secondary {
-      width:100%; padding:12px; background:transparent;
-      color:var(--accent); border:1.5px solid var(--accent);
-      border-radius:var(--radius-sm); font-family:'Kanit',sans-serif;
-      font-size:15px; cursor:pointer; transition:background .2s; margin-top:8px;
-    }
-    .btn-secondary:hover { background:var(--accent-light); }
-
-    .btn-ghost {
-      background:transparent; color:var(--text-secondary); border:none;
-      font-family:'Sarabun',sans-serif; font-size:14px; cursor:pointer;
-      padding:8px; margin-top:8px; width:100%; transition:color .2s;
-    }
-    .btn-ghost:hover { color:var(--text); }
-
-    .btn-danger {
-      width:100%; padding:11px; background:transparent;
-      color:var(--red); border:1.5px solid var(--red);
-      border-radius:var(--radius-sm); font-family:'Sarabun',sans-serif;
-      font-size:14px; cursor:pointer; margin-top:12px; transition:background .2s;
-    }
-    .btn-danger:hover { background:var(--red-light); }
-
-    .divider { text-align:center; color:var(--text-secondary); font-size:13px; margin:16px 0 0; }
-
-    .error-msg {
-      background:var(--red-light); color:var(--red);
-      border:1px solid #f5c6c2; border-radius:var(--radius-sm);
-      padding:10px 14px; font-size:13px; margin-bottom:14px;
-    }
-    .hidden { display:none !important; }
-
-    /* HEADER */
-    .app-header {
-      position:sticky; top:0; z-index:100;
-      background:var(--surface); border-bottom:1px solid var(--border);
-      padding:0 20px; height:58px;
-      display:flex; align-items:center; justify-content:space-between;
-      box-shadow:0 1px 8px rgba(44,36,32,.06);
-    }
-    .header-left  { display:flex; align-items:center; gap:10px; }
-    .header-logo  { font-size:22px; }
-    .header-title { font-family:'Kanit',sans-serif; font-size:17px; font-weight:600; }
-    .header-right { display:flex; align-items:center; gap:12px; }
-    .header-user  { font-size:13px; color:var(--text-secondary); font-weight:500; }
-    .btn-logout {
-      background:transparent; border:1px solid var(--border);
-      color:var(--text-secondary); border-radius:6px; padding:5px 12px;
-      font-family:'Sarabun',sans-serif; font-size:13px; cursor:pointer; transition:all .2s;
-    }
-    .btn-logout:hover { border-color:var(--accent); color:var(--accent); }
-    .btn-back {
-      background:transparent; border:none; font-size:20px;
-      cursor:pointer; color:var(--text-secondary);
-      padding:4px 8px; line-height:1; transition:color .2s;
-    }
-    .btn-back:hover { color:var(--accent); }
-
-    /* MAIN */
-    .main-content { max-width:680px; margin:0 auto; padding:24px 20px 60px; }
-    .section-title {
-      font-family:'Kanit',sans-serif; font-size:12px; font-weight:600;
-      color:var(--text-secondary); letter-spacing:1.4px;
-      text-transform:uppercase; margin-bottom:16px;
-    }
-
-    /* MEMBERS */
-    .members-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(148px,1fr));
-      gap:14px;
-    }
-    .member-card {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:var(--radius); padding:22px 16px;
-      text-align:center; cursor:pointer;
-      transition:all .2s; box-shadow:var(--shadow);
-    }
-    .member-card:hover {
-      border-color:var(--accent);
-      box-shadow:0 4px 20px rgba(192,98,47,.14);
-      transform:translateY(-2px);
-    }
-    .member-avatar {
-      width:56px; height:56px; border-radius:50%;
-      background:var(--accent-light);
-      display:flex; align-items:center; justify-content:center;
-      font-family:'Kanit',sans-serif; font-size:22px; font-weight:700;
-      color:var(--accent); margin:0 auto 12px;
-    }
-    .member-name     { font-family:'Kanit',sans-serif; font-size:14px; font-weight:600; }
-    .member-username { font-size:12px; color:var(--text-secondary); margin-top:2px; }
-
-    /* PROFILE */
-    .profile-top {
-      display:flex; align-items:center; gap:16px; margin-bottom:24px;
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:var(--radius); padding:20px; box-shadow:var(--shadow);
-    }
-    .avatar-big {
-      width:64px; height:64px; border-radius:50%;
-      background:var(--accent-light);
-      display:flex; align-items:center; justify-content:center;
-      font-family:'Kanit',sans-serif; font-size:26px; font-weight:700;
-      color:var(--accent); flex-shrink:0;
-    }
-    .profile-info    { flex:1; min-width:0; }
-    .profile-name    { font-family:'Kanit',sans-serif; font-size:18px; font-weight:600; }
-    .profile-username{ font-size:13px; color:var(--text-secondary); }
-    .btn-add {
-      background:var(--accent); color:#fff; border:none;
-      border-radius:var(--radius-sm); padding:9px 16px;
-      font-family:'Kanit',sans-serif; font-size:14px;
-      cursor:pointer; white-space:nowrap; transition:background .2s; flex-shrink:0;
-    }
-    .btn-add:hover { background:var(--accent-dark); }
-
-    /* ITEMS */
-    .items-list { display:flex; flex-direction:column; gap:10px; }
-    .item-card {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:var(--radius); padding:16px 18px;
-      box-shadow:var(--shadow); transition:box-shadow .2s;
-    }
-    .item-card:hover { box-shadow:0 4px 16px rgba(44,36,32,.1); }
-    .item-header {
-      display:flex; align-items:center;
-      justify-content:space-between; margin-bottom:10px; gap:8px;
-    }
-    .item-name  { font-family:'Kanit',sans-serif; font-size:15px; font-weight:600; }
-    .item-badge {
-      font-size:11px; padding:2px 8px;
-      border-radius:20px; font-weight:600; white-space:nowrap;
-    }
-    .badge-public  { background:var(--green-light); color:var(--green); }
-    .badge-private { background:var(--accent-light); color:var(--accent); }
-    .item-row {
-      display:flex; align-items:baseline;
-      gap:8px; margin-bottom:6px; font-size:14px;
-    }
-    .item-label {
-      color:var(--text-secondary); font-size:11px; font-weight:600;
-      text-transform:uppercase; letter-spacing:.5px;
-      min-width:72px; flex-shrink:0;
-    }
-    .item-value { color:var(--text); flex:1; word-break:break-all; }
-    .item-note  {
-      font-size:13px; color:var(--text-secondary);
-      background:var(--surface2); border-radius:6px;
-      padding:7px 10px; margin-top:8px; white-space:pre-wrap;
-    }
-    .item-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-    .btn-copy {
-      background:var(--surface2); border:1px solid var(--border);
-      color:var(--text-secondary); border-radius:6px; padding:5px 12px;
-      font-family:'Sarabun',sans-serif; font-size:12px; cursor:pointer; transition:all .2s;
-    }
-    .btn-copy:hover  { border-color:var(--accent); color:var(--accent); }
-    .btn-copy.copied { background:var(--green-light); color:var(--green); border-color:var(--green); }
-    .btn-edit {
-      margin-left:auto; background:transparent;
-      border:1px solid var(--border); color:var(--text-secondary);
-      border-radius:6px; padding:5px 12px;
-      font-family:'Sarabun',sans-serif; font-size:12px; cursor:pointer; transition:all .2s;
-    }
-    .btn-edit:hover { border-color:var(--accent); color:var(--accent); }
-    .empty-state { text-align:center; padding:48px 20px; color:var(--text-secondary); }
-    .empty-icon  { font-size:40px; margin-bottom:12px; }
-
-    /* MODAL */
-    .modal-overlay {
-      position:fixed; inset:0;
-      background:rgba(44,36,32,.5);
-      backdrop-filter:blur(4px);
-      z-index:200;
-      display:flex; align-items:flex-end; justify-content:center;
-    }
-    .modal-card {
-      background:var(--surface); border-radius:20px 20px 0 0;
-      padding:28px 24px 36px; width:100%; max-width:480px;
-      max-height:92vh; overflow-y:auto;
-      animation:slideUp .3s cubic-bezier(.32,.72,0,1);
-    }
-    @keyframes slideUp {
-      from { transform:translateY(100%); }
-      to   { transform:translateY(0); }
-    }
-    .modal-title { font-family:'Kanit',sans-serif; font-size:18px; font-weight:600; margin-bottom:20px; }
-    .modal-actions { display:flex; gap:10px; margin-top:8px; }
-    .modal-actions .btn-ghost   { width:auto; flex:1; border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:12px; }
-    .modal-actions .btn-primary { flex:2; margin:0; }
-
-    /* TOGGLE */
-    .toggle-row   { display:flex; align-items:center; gap:12px; }
-    .toggle-label { font-size:14px; flex:1; }
-    .switch { position:relative; display:inline-block; width:44px; height:24px; }
-    .switch input { opacity:0; width:0; height:0; }
-    .slider {
-      position:absolute; inset:0;
-      background:var(--border); border-radius:24px;
-      cursor:pointer; transition:background .2s;
-    }
-    .slider::before {
-      content:''; position:absolute;
-      width:18px; height:18px; left:3px; top:3px;
-      background:#fff; border-radius:50%;
-      transition:transform .2s;
-      box-shadow:0 1px 4px rgba(0,0,0,.2);
-    }
-    input:checked + .slider              { background:var(--green); }
-    input:checked + .slider::before      { transform:translateX(20px); }
-
-    /* TOAST */
-    .toast {
-      position:fixed; bottom:28px; left:50%;
-      transform:translateX(-50%);
-      background:var(--text); color:#fff;
-      border-radius:30px; padding:10px 22px;
-      font-size:14px; z-index:999;
-      white-space:nowrap; box-shadow:var(--shadow-lg);
-      animation:toastIn .25s ease;
-    }
-    @keyframes toastIn {
-      from { opacity:0; transform:translateX(-50%) translateY(10px); }
-      to   { opacity:1; transform:translateX(-50%) translateY(0); }
-    }
-    .loading { text-align:center; padding:32px; color:var(--text-secondary); }
-
-    @media (min-width:600px) {
-      .modal-overlay { align-items:center; padding:24px; }
-      .modal-card    { border-radius:20px; }
-    }
+    .login-bg { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(ellipse at 20% 20%, #f7e6d8 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, #e8ddd4 0%, transparent 60%), var(--bg); }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px 36px; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); animation: fadeUp 0.4s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .logo-wrap { text-align: center; margin-bottom: 32px; }
+    .logo-icon { font-size: 40px; display: block; margin-bottom: 8px; }
+    .logo-text { font-family: 'Kanit', sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
+    .logo-sub { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); font-family: 'Sarabun', sans-serif; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+    .btn-primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-secondary { width: 100%; padding: 12px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: var(--radius-sm); font-family: 'Kanit', sans-serif; font-size: 15px; cursor: pointer; margin-top: 8px; }
+    .btn-ghost { background: transparent; color: var(--text-secondary); border: none; font-family: 'Sarabun', sans-serif; font-size: 14px; cursor: pointer; padding: 8px; margin-top: 8px; width: 100%; }
+    .btn-danger { width: 100%; padding: 11px; background: transparent; color: var(--red); border: 1.5px solid var(--red); border-radius: var(--radius-sm); font-size: 14px; cursor: pointer; margin-top: 12px; }
+    .error-msg { background: var(--red-light); color: var(--red); border: 1px solid #f5c6c2; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
+    .hidden { display: none !important; }
+    .app-header { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 58px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 8px rgba(44,36,32,0.06); }
+    .header-title { font-family: 'Kanit', sans-serif; font-size: 17px; font-weight: 600; }
+    .main-content { max-width: 680px; margin: 0 auto; padding: 24px 20px 60px; }
+    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+    .member-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 16px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
+    .member-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700; color: var(--accent); margin: 0 auto 12px; }
+    .profile-top { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    .avatar-big { width: 64px; height: 64px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .item-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); margin-bottom: 10px; }
+    .item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .item-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+    .badge-public { background: var(--green-light); color: var(--green); }
+    .badge-private { background: var(--accent-light); color: var(--accent); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(44,36,32,0.45); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
+    .modal-card { background: var(--surface); border-radius: 20px 20px 0 0; padding: 28px 24px 36px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: 0.2s; }
+    .slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
+    input:checked + .slider { background: var(--green); }
+    input:checked + .slider::before { transform: translateX(20px); }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; border-radius: 30px; padding: 10px 22px; font-size: 14px; z-index: 999; }
   </style>
 </head>
 <body>
 <div id="app">
-
-  <!-- LOGIN -->
   <div id="page-login" class="page active">
-    <div class="login-bg">
-      <div class="login-card">
-        <div class="logo-wrap">
-          <span class="logo-icon">🏠</span>
-          <div class="logo-text">HomeVault</div>
-          <p class="logo-sub">พื้นที่ส่วนตัวของคนในบ้าน</p>
-        </div>
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="login-username" placeholder="ชื่อผู้ใช้" autocomplete="username" />
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="login-password" placeholder="รหัสผ่าน" autocomplete="current-password" />
-        </div>
-        <div id="login-error" class="error-msg hidden"></div>
-        <button class="btn-primary" id="btn-login">เข้าสู่ระบบ</button>
-        <div class="divider">ยังไม่มีบัญชี?</div>
-        <button class="btn-secondary" id="btn-goto-register">สมัครด้วยโค้ดเชิญ</button>
-      </div>
-    </div>
+    <div class="login-bg"><div class="login-card">
+      <div class="logo-wrap"><span class="logo-icon">🏠</span><div class="logo-text">HomeVault</div></div>
+      <div class="form-group"><label>Username</label><input type="text" id="login-username" placeholder="ชื่อผู้ใช้"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="รหัสผ่าน"></div>
+      <div id="login-error" class="error-msg hidden"></div>
+      <button class="btn-primary" id="btn-login">เข้าสู่ระบบ</button>
+      <button class="btn-secondary" id="btn-goto-register">สมัครด้วยโค้ดเชิญ</button>
+    </div></div>
   </div>
-
-  <!-- REGISTER -->
   <div id="page-register" class="page">
-    <div class="login-bg">
-      <div class="login-card">
-        <div class="logo-wrap">
-          <span class="logo-icon">🔑</span>
-          <div class="logo-text" style="font-size:22px">สมัครสมาชิก</div>
-          <p class="logo-sub">ต้องมีโค้ดเชิญจาก Admin</p>
-        </div>
-        <div class="form-group">
-          <label>โค้ดเชิญ</label>
-          <input type="text" id="reg-invite" placeholder="กรอกโค้ดเชิญ" />
-        </div>
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="reg-username" placeholder="ตั้งชื่อผู้ใช้ (ห้ามมีช่องว่าง)" />
-        </div>
-        <div class="form-group">
-          <label>ชื่อที่แสดง</label>
-          <input type="text" id="reg-displayname" placeholder="ชื่อเล่น / ชื่อจริง" />
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="reg-password" placeholder="ตั้งรหัสผ่าน" />
-        </div>
-        <div id="reg-error" class="error-msg hidden"></div>
-        <button class="btn-primary" id="btn-register">สมัครสมาชิก</button>
-        <button class="btn-ghost" id="btn-goto-login">← กลับไปเข้าสู่ระบบ</button>
-      </div>
-    </div>
+    <div class="login-bg"><div class="login-card">
+      <div class="logo-wrap"><span class="logo-icon">🔑</span><div class="logo-text">สมัครสมาชิก</div></div>
+      <div class="form-group"><label>โค้ดเชิญ</label><input type="text" id="reg-invite" placeholder="กรอกโค้ดเชิญ"></div>
+      <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="ชื่อผู้ใช้"></div>
+      <div class="form-group"><label>ชื่อที่แสดง</label><input type="text" id="reg-displayname" placeholder="ชื่อเล่น"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="ตั้งรหัสผ่าน"></div>
+      <div id="reg-error" class="error-msg hidden"></div>
+      <button class="btn-primary" id="btn-register">สมัครสมาชิก</button>
+      <button class="btn-ghost" id="btn-goto-login">← กลับไป Login</button>
+    </div></div>
   </div>
-
-  <!-- HOME -->
   <div id="page-home" class="page">
-    <header class="app-header">
-      <div class="header-left">
-        <span class="header-logo">🏠</span>
-        <span class="header-title">HomeVault</span>
-      </div>
-      <div class="header-right">
-        <span class="header-user" id="header-username"></span>
-        <button class="btn-logout" id="btn-logout">ออก</button>
-      </div>
-    </header>
-    <main class="main-content">
-      <div class="section-title">สมาชิกในบ้าน</div>
-      <div class="members-grid" id="members-grid">
-        <div class="loading">กำลังเชื่อมต่อ...</div>
-      </div>
-    </main>
+    <header class="app-header"><div class="header-title">🏠 HomeVault</div><div id="header-username"></div><button class="btn-logout" id="btn-logout">ออก</button></header>
+    <main class="main-content"><div class="section-title">สมาชิกในบ้าน</div><div class="members-grid" id="members-grid"></div></main>
   </div>
-
-  <!-- PROFILE -->
   <div id="page-profile" class="page">
-    <header class="app-header">
-      <div class="header-left">
-        <button class="btn-back" id="btn-back">←</button>
-        <span class="header-title" id="profile-header-name"></span>
-      </div>
-      <div class="header-right">
-        <button class="btn-logout" id="btn-logout2">ออก</button>
-      </div>
-    </header>
+    <header class="app-header"><button id="btn-back">←</button><div id="profile-header-name"></div><button id="btn-logout2">ออก</button></header>
     <main class="main-content">
-      <div class="profile-top">
-        <div class="avatar-big" id="profile-avatar"></div>
-        <div class="profile-info">
-          <div class="profile-name"     id="profile-display-name"></div>
-          <div class="profile-username" id="profile-username-text"></div>
-        </div>
-        <button class="btn-add hidden" id="btn-add-item">+ เพิ่ม</button>
-      </div>
+      <div class="profile-top"><div class="avatar-big" id="profile-avatar"></div><div class="profile-info"><div id="profile-display-name"></div><div id="profile-username-text"></div></div><button class="btn-add hidden" id="btn-add-item">+ เพิ่ม</button></div>
       <div class="items-list" id="items-list"></div>
     </main>
   </div>
-
-  <!-- MODAL -->
-  <div id="modal-item" class="modal-overlay hidden">
-    <div class="modal-card">
-      <div class="modal-title" id="modal-title">เพิ่มรายการใหม่</div>
-      <div class="form-group">
-        <label>ชื่อรายการ *</label>
-        <input type="text" id="item-name" placeholder="เช่น Netflix, Gmail" />
-      </div>
-      <div class="form-group">
-        <label>Username / Email</label>
-        <input type="text" id="item-username" placeholder="ชื่อผู้ใช้หรืออีเมล" />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="text" id="item-password" placeholder="รหัสผ่าน" />
-      </div>
-      <div class="form-group">
-        <label>หมายเหตุ</label>
-        <textarea id="item-note" placeholder="บันทึกเพิ่มเติม..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>การมองเห็น</label>
-        <div class="toggle-row">
-          <span class="toggle-label" id="visibility-label">🔒 Private</span>
-          <label class="switch">
-            <input type="checkbox" id="item-public" />
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-ghost" id="btn-cancel-item">ยกเลิก</button>
-        <button class="btn-primary" id="btn-save-item">บันทึก</button>
-      </div>
-      <button class="btn-danger hidden" id="btn-delete-item">🗑 ลบรายการนี้</button>
-    </div>
-  </div>
-
+  <div id="modal-item" class="modal-overlay hidden"><div class="modal-card">
+    <div class="modal-title" id="modal-title">เพิ่มรายการ</div>
+    <div class="form-group"><label>ชื่อรายการ *</label><input type="text" id="item-name"></div>
+    <div class="form-group"><label>Username</label><input type="text" id="item-username"></div>
+    <div class="form-group"><label>Password</label><input type="text" id="item-password"></div>
+    <div class="form-group"><label>หมายเหตุ</label><textarea id="item-note"></textarea></div>
+    <div class="form-group"><div class="toggle-row"><span id="visibility-label">🔒 Private</span><label class="switch"><input type="checkbox" id="item-public"><span class="slider"></span></label></div></div>
+    <div class="modal-actions"><button id="btn-cancel-item">ยกเลิก</button><button class="btn-primary" id="btn-save-item">บันทึก</button></div>
+    <button class="btn-danger hidden" id="btn-delete-item">🗑 ลบ</button>
+  </div></div>
   <div id="toast" class="toast hidden"></div>
 </div>
 
-<!-- Firebase compat (ไม่ต้องใช้ import/export) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, addDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<script>
-// ══════════════════════════════════════════
-//  🔧 แก้ค่า Firebase ของคุณที่นี่
-// ══════════════════════════════════════════
-const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// ── STATE ──
-let currentUser   = null;
-let editingItemId = null;
-
-// ── ROUTER ──
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ── HASH ──
-async function hash(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-// ── AUTH ──
-async function loginUser(username, password) {
-  const snap = await db.collection('users').doc(username.toLowerCase()).get();
-  if (!snap.exists) throw new Error('ไม่พบผู้ใช้นี้');
-  const data = snap.data();
-  if (data.passwordHash !== await hash(password)) throw new Error('รหัสผ่านไม่ถูกต้อง');
-  return { uid: username.toLowerCase(), displayName: data.displayName };
-}
-
-async function registerUser(inviteCode, username, displayName, password) {
-  const invSnap = await db.collection('settings').doc('inviteCodes').get();
-  if (!invSnap.exists) throw new Error('ไม่พบโค้ดเชิญ กรุณาติดต่อ Admin');
-  const codes = invSnap.data();
-  const key   = inviteCode.trim().toUpperCase();
-  const entry = codes[key];
-  if (!entry) throw new Error('โค้ดเชิญไม่ถูกต้อง');
-  if (typeof entry === 'object' && entry.username &&
-      entry.username.toLowerCase() !== username.trim().toLowerCase())
-    throw new Error('โค้ดเชิญนี้ไม่ตรงกับ username ที่กำหนด');
-  const uid = username.trim().toLowerCase();
-  if ((await db.collection('users').doc(uid).get()).exists)
-    throw new Error('Username นี้ถูกใช้แล้ว');
-  await db.collection('users').doc(uid).set({
-    displayName: displayName.trim(),
-    passwordHash: await hash(password),
-    createdAt: Date.now()
-  });
-  return { uid, displayName: displayName.trim() };
-}
-
-// session
-const saveSession  = u => sessionStorage.setItem('hv_user', JSON.stringify(u));
-const loadSession  = () => { const s = sessionStorage.getItem('hv_user'); return s ? JSON.parse(s) : null; };
-const clearSession = () => sessionStorage.removeItem('hv_user');
-
-// ── MEMBERS ──
-async function loadMembers() {
-  const grid = document.getElementById('members-grid');
-  grid.innerHTML = '<div class="loading">กำลังโหลด...</div>';
-  try {
-    const snap = await db.collection('users').get();
-    grid.innerHTML = '';
-    snap.forEach(d => {
-      const { displayName } = d.data();
-      const uid  = d.id;
-      const card = document.createElement('div');
-      card.className = 'member-card';
-      const initial = (displayName || uid).charAt(0).toUpperCase();
-      card.innerHTML = `
-        <div class="member-avatar">${initial}</div>
-        <div class="member-name">${esc(displayName || uid)}</div>
-        <div class="member-username">@${esc(uid)}</div>`;
-      card.addEventListener('click', () => openProfile(uid, displayName || uid));
-      grid.appendChild(card);
-    });
-  } catch(e) {
-    grid.innerHTML = `<div class="loading" style="color:var(--red)">โหลดไม่ได้: ${e.message}</div>`;
-  }
-}
-
-// ── PROFILE / ITEMS ──
-async function openProfile(uid, displayName) {
-  const isOwner = currentUser.uid === uid;
-  document.getElementById('profile-header-name').textContent  = displayName;
-  document.getElementById('profile-display-name').textContent = displayName;
-  document.getElementById('profile-username-text').textContent = '@' + uid;
-  document.getElementById('profile-avatar').textContent = displayName.charAt(0).toUpperCase();
-  const addBtn = document.getElementById('btn-add-item');
-  isOwner ? addBtn.classList.remove('hidden') : addBtn.classList.add('hidden');
-  showPage('page-profile');
-  await loadItems(uid, isOwner);
-}
-
-async function loadItems(uid, isOwner) {
-  const list = document.getElementById('items-list');
-  list.innerHTML = '<div class="loading">กำลังโหลด...</div>';
-  try {
-    let q = db.collection('users').doc(uid).collection('items').orderBy('createdAt','desc');
-    if (!isOwner) q = db.collection('users').doc(uid).collection('items').where('public','==',true);
-    const snap = await q.get();
-    list.innerHTML = '';
-    if (snap.empty) {
-      list.innerHTML = `<div class="empty-state">
-        <div class="empty-icon">${isOwner?'📭':'🔒'}</div>
-        <p>${isOwner?'ยังไม่มีรายการ กด + เพิ่มได้เลย':'ไม่มีรายการสาธารณะ'}</p></div>`;
-      return;
-    }
-    snap.forEach(d => list.appendChild(renderItem(d.id, d.data(), isOwner)));
-  } catch(e) {
-    list.innerHTML = `<div class="loading" style="color:var(--red)">โหลดไม่ได้: ${e.message}</div>`;
-  }
-}
-
-function renderItem(itemId, item, isOwner) {
-  const card = document.createElement('div');
-  card.className = 'item-card';
-  const badgeClass = item.public ? 'badge-public'  : 'badge-private';
-  const badgeText  = item.public ? '🌐 Public'     : '🔒 Private';
-  card.innerHTML = `
-    <div class="item-header">
-      <div class="item-name">${esc(item.name||'-')}</div>
-      <span class="item-badge ${badgeClass}">${badgeText}</span>
-    </div>
-    ${item.username?`<div class="item-row"><span class="item-label">Username</span><span class="item-value">${esc(item.username)}</span></div>`:''}
-    ${item.password?`<div class="item-row"><span class="item-label">Password</span><span class="item-value">${esc(item.password)}</span></div>`:''}
-    ${item.note?`<div class="item-note">${esc(item.note)}</div>`:''}
-    <div class="item-actions">
-      ${item.username?`<button class="btn-copy" data-val="${esc(item.username)}">📋 Copy User</button>`:''}
-      ${item.password?`<button class="btn-copy" data-val="${esc(item.password)}">📋 Copy Pass</button>`:''}
-      ${isOwner?`<button class="btn-edit">✏️ แก้ไข</button>`:''}
-    </div>`;
-  card.querySelectorAll('.btn-copy').forEach(btn => {
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(btn.dataset.val).then(() => {
-        const orig = btn.textContent;
-        btn.textContent = '✅ คัดลอกแล้ว'; btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
-      });
-    });
-  });
-  const eb = card.querySelector('.btn-edit');
-  if (eb) eb.addEventListener('click', () => openEditModal(itemId, item));
-  return card;
-}
-
-// ── MODAL ──
-function openAddModal() {
-  editingItemId = null;
-  document.getElementById('modal-title').textContent = 'เพิ่มรายการใหม่';
-  ['item-name','item-username','item-password','item-note'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('item-public').checked = false;
-  document.getElementById('visibility-label').textContent = '🔒 Private';
-  document.getElementById('btn-delete-item').classList.add('hidden');
-  document.getElementById('modal-item').classList.remove('hidden');
-}
-function openEditModal(itemId, item) {
-  editingItemId = itemId;
-  document.getElementById('modal-title').textContent = 'แก้ไขรายการ';
-  document.getElementById('item-name').value     = item.name     || '';
-  document.getElementById('item-username').value = item.username || '';
-  document.getElementById('item-password').value = item.password || '';
-  document.getElementById('item-note').value     = item.note     || '';
-  document.getElementById('item-public').checked = !!item.public;
-  document.getElementById('visibility-label').textContent = item.public ? '🌐 Public' : '🔒 Private';
-  document.getElementById('btn-delete-item').classList.remove('hidden');
-  document.getElementById('modal-item').classList.remove('hidden');
-}
-function closeModal() { document.getElementById('modal-item').classList.add('hidden'); }
-
-async function saveItem() {
-  const name     = document.getElementById('item-name').value.trim();
-  const username = document.getElementById('item-username').value.trim();
-  const password = document.getElementById('item-password').value.trim();
-  const note     = document.getElementById('item-note').value.trim();
-  const isPublic = document.getElementById('item-public').checked;
-  if (!name) { showToast('กรุณาใส่ชื่อรายการ'); return; }
-  const btn = document.getElementById('btn-save-item');
-  btn.disabled = true;
-  try {
-    const col = db.collection('users').doc(currentUser.uid).collection('items');
-    const payload = { name, username, password, note, public: isPublic };
-    if (editingItemId) {
-      await col.doc(editingItemId).update(payload);
-      showToast('อัปเดตแล้ว ✅');
-    } else {
-      payload.createdAt = Date.now();
-      await col.add(payload);
-      showToast('เพิ่มรายการแล้ว ✅');
-    }
-    closeModal();
-    await loadItems(currentUser.uid, true);
-  } catch(e) { showToast('เกิดข้อผิดพลาด: ' + e.message); }
-  finally { btn.disabled = false; }
-}
-
-async function deleteItem() {
-  if (!editingItemId || !confirm('ลบรายการนี้?')) return;
-  try {
-    await db.collection('users').doc(currentUser.uid).collection('items').doc(editingItemId).delete();
-    showToast('ลบแล้ว'); closeModal();
-    await loadItems(currentUser.uid, true);
-  } catch(e) { showToast('ลบไม่ได้: ' + e.message); }
-}
-
-// ── HELPERS ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.remove('hidden');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.add('hidden'), 2600);
-}
-const showError = (id, msg) => { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); };
-const hideError = id => document.getElementById(id).classList.add('hidden');
-const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-
-// ── INIT ──
-(function() {
-  const saved = loadSession();
-  if (saved) {
-    currentUser = saved;
-    document.getElementById('header-username').textContent = saved.displayName;
-    showPage('page-home');
-    loadMembers();
-  } else {
-    showPage('page-login');
-  }
-
-  // Login
-  const doLogin = async () => {
-    hideError('login-error');
-    const u = document.getElementById('login-username').value.trim();
-    const p = document.getElementById('login-password').value;
-    if (!u || !p) { showError('login-error','กรุณากรอก username และ password'); return; }
-    const btn = document.getElementById('btn-login');
-    btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
-    try {
-      currentUser = await loginUser(u, p);
-      saveSession(currentUser);
-      document.getElementById('header-username').textContent = currentUser.displayName;
-      showPage('page-home'); loadMembers();
-    } catch(e) { showError('login-error', e.message); }
-    finally { btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ'; }
+  const firebaseConfig = {
+    apiKey: "AIzaSyBnbXPyLcqCnRdsK3zvkKXbvXRSfHOwZdU",
+    authDomain: "homebase-ddfd3.firebaseapp.com",
+    projectId: "homebase-ddfd3",
+    storageBucket: "homebase-ddfd3.firebasestorage.app",
+    messagingSenderId: "565115475465",
+    appId: "1:565115475465:web:6c6b2be92c4ac3ffb0cad8",
+    measurementId: "G-FQZ4H2KV95"
   };
-  document.getElementById('btn-login').addEventListener('click', doLogin);
-  ['login-username','login-password'].forEach(id =>
-    document.getElementById(id).addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); })
-  );
 
-  // Register
-  document.getElementById('btn-goto-register').addEventListener('click', () => showPage('page-register'));
-  document.getElementById('btn-goto-login').addEventListener('click',    () => showPage('page-login'));
-  document.getElementById('btn-register').addEventListener('click', async () => {
-    hideError('reg-error');
-    const invite = document.getElementById('reg-invite').value.trim();
-    const uname  = document.getElementById('reg-username').value.trim();
-    const dname  = document.getElementById('reg-displayname').value.trim();
-    const pass   = document.getElementById('reg-password').value;
-    if (!invite||!uname||!dname||!pass) { showError('reg-error','กรุณากรอกข้อมูลให้ครบ'); return; }
-    if (uname.includes(' '))            { showError('reg-error','Username ห้ามมีช่องว่าง'); return; }
-    const btn = document.getElementById('btn-register');
-    btn.disabled = true; btn.textContent = 'กำลังสมัคร...';
-    try {
-      const user = await registerUser(invite, uname, dname, pass);
-      showToast('สมัครสำเร็จ! กรุณา Login');
-      showPage('page-login');
-      document.getElementById('login-username').value = user.uid;
-    } catch(e) { showError('reg-error', e.message); }
-    finally { btn.disabled = false; btn.textContent = 'สมัครสมาชิก'; }
-  });
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  // Logout
-  const doLogout = () => { clearSession(); currentUser = null; showPage('page-login'); };
-  document.getElementById('btn-logout').addEventListener('click', doLogout);
-  document.getElementById('btn-logout2').addEventListener('click', doLogout);
+  let currentUser = null; let viewingUid = null; let editingItemId = null;
 
-  // Back
-  document.getElementById('btn-back').addEventListener('click', () => { showPage('page-home'); loadMembers(); });
+  async function simpleHash(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join(''); }
+  function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+  function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500); }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  // Modal
-  document.getElementById('btn-add-item').addEventListener('click', openAddModal);
-  document.getElementById('btn-cancel-item').addEventListener('click', closeModal);
-  document.getElementById('btn-save-item').addEventListener('click', saveItem);
-  document.getElementById('btn-delete-item').addEventListener('click', deleteItem);
-  document.getElementById('modal-item').addEventListener('click', e => {
-    if (e.target === document.getElementById('modal-item')) closeModal();
-  });
+  async function init() {
+    const s = sessionStorage.getItem('hv_user'); if(s) { currentUser = JSON.parse(s); document.getElementById('header-username').textContent = currentUser.displayName; showPage('page-home'); loadMembers(); } else { showPage('page-login'); }
 
-  // Toggle label
-  document.getElementById('item-public').addEventListener('change', e => {
-    document.getElementById('visibility-label').textContent = e.target.checked ? '🌐 Public' : '🔒 Private';
-  });
-})();
+    document.getElementById('btn-login').onclick = async () => {
+      const u = document.getElementById('login-username').value.trim(); const p = document.getElementById('login-password').value;
+      try {
+        const snap = await getDoc(doc(db, 'users', u.toLowerCase())); if(!snap.exists()) throw new Error('ไม่พบผู้ใช้');
+        if(snap.data().passwordHash !== await simpleHash(p)) throw new Error('รหัสผิด');
+        currentUser = { uid: u.toLowerCase(), displayName: snap.data().displayName }; sessionStorage.setItem('hv_user', JSON.stringify(currentUser));
+        location.reload();
+      } catch(e) { document.getElementById('login-error').textContent = e.message; document.getElementById('login-error').classList.remove('hidden'); }
+    };
+
+    document.getElementById('btn-register').onclick = async () => {
+      const inv = document.getElementById('reg-invite').value.trim().toUpperCase(); const u = document.getElementById('reg-username').value.trim().toLowerCase();
+      const d = document.getElementById('reg-displayname').value.trim(); const p = document.getElementById('reg-password').value;
+      try {
+        const iSnap = await getDoc(doc(db, 'settings', 'inviteCodes')); if(!iSnap.exists() || !iSnap.data()[inv]) throw new Error('โค้ดเชิญผิด');
+        await setDoc(doc(db, 'users', u), { displayName: d, passwordHash: await simpleHash(p), createdAt: Date.now() });
+        showToast('สมัครสำเร็จ!'); showPage('page-login');
+      } catch(e) { document.getElementById('reg-error').textContent = e.message; document.getElementById('reg-error').classList.remove('hidden'); }
+    };
+
+    document.getElementById('btn-logout').onclick = document.getElementById('btn-logout2').onclick = () => { sessionStorage.removeItem('hv_user'); location.reload(); };
+    document.getElementById('btn-back').onclick = () => { showPage('page-home'); loadMembers(); };
+    document.getElementById('btn-goto-register').onclick = () => showPage('page-register');
+    document.getElementById('btn-goto-login').onclick = () => showPage('page-login');
+    document.getElementById('btn-add-item').onclick = () => { editingItemId = null; document.getElementById('modal-title').textContent = 'เพิ่มรายการ'; document.getElementById('modal-item').classList.remove('hidden'); };
+    document.getElementById('btn-cancel-item').onclick = () => document.getElementById('modal-item').classList.add('hidden');
+
+    document.getElementById('btn-save-item').onclick = async () => {
+      const payload = { name: document.getElementById('item-name').value, username: document.getElementById('item-username').value, password: document.getElementById('item-password').value, note: document.getElementById('item-note').value, public: document.getElementById('item-public').checked };
+      const col = collection(db, 'users', currentUser.uid, 'items');
+      if(editingItemId) await updateDoc(doc(col, editingItemId), payload); else { payload.createdAt = Date.now(); await addDoc(col, payload); }
+      document.getElementById('modal-item').classList.add('hidden'); loadItems(currentUser.uid, true);
+    };
+  }
+
+  async function loadMembers() {
+    const grid = document.getElementById('members-grid'); grid.innerHTML = 'โหลด...';
+    const snap = await getDocs(collection(db, 'users')); grid.innerHTML = '';
+    snap.forEach(d => {
+      const card = document.createElement('div'); card.className = 'member-card';
+      card.innerHTML = `<div class="member-avatar">${d.data().displayName[0]}</div><div>${d.data().displayName}</div>`;
+      card.onclick = () => openProfile(d.id, d.data().displayName); grid.appendChild(card);
+    });
+  }
+
+  async function openProfile(uid, name) {
+    viewingUid = uid; const isOwner = currentUser.uid === uid;
+    document.getElementById('profile-header-name').textContent = name; document.getElementById('profile-display-name').textContent = name;
+    document.getElementById('profile-avatar').textContent = name[0];
+    if(isOwner) document.getElementById('btn-add-item').classList.remove('hidden'); else document.getElementById('btn-add-item').classList.add('hidden');
+    showPage('page-profile'); loadItems(uid, isOwner);
+  }
+
+  async function loadItems(uid, isOwner) {
+    const list = document.getElementById('items-list'); list.innerHTML = 'โหลด...';
+    let q = query(collection(db, 'users', uid, 'items'), orderBy('createdAt', 'desc'));
+    if(!isOwner) q = query(collection(db, 'users', uid, 'items'), where('public', '==', true));
+    const snap = await getDocs(q); list.innerHTML = '';
+    snap.forEach(d => {
+      const item = d.data(); const card = document.createElement('div'); card.className = 'item-card';
+      card.innerHTML = `<div class="item-header"><b>${esc(item.name)}</b> <span class="item-badge ${item.public?'badge-public':'badge-private'}">${item.public?'🌐':'🔒'}</span></div><div>User: ${esc(item.username)}</div><div>Pass: ${esc(item.password)}</div>`;
+      list.appendChild(card);
+    });
+  }
+
+  init();
 </script>
 </body>
 </html>
