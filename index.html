@@ -31,24 +31,18 @@
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
     .btn-primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
     .btn-primary:hover { background: var(--accent-dark); }
-    .btn-secondary { width: 100%; padding: 12px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: var(--radius-sm); font-family: 'Kanit', sans-serif; font-size: 15px; cursor: pointer; margin-top: 8px; }
     .btn-ghost { background: transparent; color: var(--text-secondary); border: none; font-family: 'Sarabun', sans-serif; font-size: 14px; cursor: pointer; padding: 8px; margin-top: 8px; width: 100%; }
     .btn-danger { width: 100%; padding: 11px; background: transparent; color: var(--red); border: 1.5px solid var(--red); border-radius: var(--radius-sm); font-size: 14px; cursor: pointer; margin-top: 12px; }
-    .error-msg { background: var(--red-light); color: var(--red); border: 1px solid #f5c6c2; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
-    .hidden { display: none !important; }
     .app-header { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 58px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 8px rgba(44,36,32,0.06); }
     .header-title { font-family: 'Kanit', sans-serif; font-size: 17px; font-weight: 600; }
     .main-content { max-width: 680px; margin: 0 auto; padding: 24px 20px 60px; }
-    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
     .member-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 16px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
     .member-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700; color: var(--accent); margin: 0 auto 12px; }
     .profile-top { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
     .avatar-big { width: 64px; height: 64px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
     .item-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); margin-bottom: 10px; }
     .item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .item-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
-    .badge-public { background: var(--green-light); color: var(--green); }
-    .badge-private { background: var(--accent-light); color: var(--accent); }
     .modal-overlay { position: fixed; inset: 0; background: rgba(44,36,32,0.45); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
     .modal-card { background: var(--surface); border-radius: 20px 20px 0 0; padding: 28px 24px 36px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
     .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
@@ -58,6 +52,8 @@
     input:checked + .slider { background: var(--green); }
     input:checked + .slider::before { transform: translateX(20px); }
     .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; border-radius: 30px; padding: 10px 22px; font-size: 14px; z-index: 999; }
+    .btn-logout { background: transparent; border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
@@ -71,7 +67,7 @@
           <div class="logo-sub">ระบบเก็บข้อมูลสำหรับคนในบ้าน</div>
         </div>
         
-        <button class="btn-primary" id="btn-google-login" style="background: #df4a32; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; cursor: pointer;">
+        <button class="btn-primary" id="btn-google-login" style="background: #df4a32; display: flex; align-items: center; justify-content: center; gap: 10px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
             <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.909 3.28-2.1 4.45-1.14 1.14-2.9 2.38-5.74 2.38-4.57 0-8.24-3.71-8.24-8.28s3.67-8.28 8.24-8.28c2.48 0 4.28.98 5.62 2.27l2.31-2.31C18.42 2.34 15.7 1 12.48 1 6.32 1 1.25 6.07 1.25 12.22s5.07 11.22 11.23 11.22c3.33 0 5.85-1.1 7.82-3.14 2.02-2.02 2.66-4.83 2.66-7.13 0-.68-.05-1.33-.14-1.95h-10.3z"/>
           </svg>
@@ -84,7 +80,8 @@
       </div>
     </div>
   </div>
- <div id="page-register" class="page">
+
+  <div id="page-register" class="page">
     <div class="login-bg">
       <div class="login-card">
         <div class="logo-wrap">
@@ -92,53 +89,72 @@
           <div class="logo-text">ลงทะเบียนใหม่</div>
           <div class="logo-sub">กรุณากรอกข้อมูลเพื่อยืนยันตัวตน</div>
         </div>
-        
         <div class="form-group">
           <label>โค้ดเชิญ</label>
           <input type="text" id="reg-invite" placeholder="กรอกโค้ดเชิญจากแอดมิน">
         </div>
-        
         <div class="form-group">
           <label>ชื่อที่แสดง (ชื่อเล่น)</label>
           <input type="text" id="reg-displayname" placeholder="เช่น แม่, พ่อ, พี่เอ">
         </div>
-
         <button class="btn-primary" id="btn-register-confirm">ยืนยันการลงทะเบียน</button>
-        <button class="btn-ghost" id="btn-logout" style="width:100%; margin-top:10px;">← ออกจากระบบ</button>
+        <button class="btn-ghost" id="btn-logout-reg">← ออกจากระบบ</button>
       </div>
     </div>
   </div>
+
   <div id="page-home" class="page">
-    <header class="app-header"><div class="header-title">🏠 HomeVault</div><div id="header-username"></div><button class="btn-logout" id="btn-logout">ออก</button></header>
-    <main class="main-content"><div class="section-title">สมาชิกในบ้าน</div><div class="members-grid" id="members-grid"></div></main>
-  </div>
-  <div id="page-profile" class="page">
-    <header class="app-header"><button id="btn-back">←</button><div id="profile-header-name"></div><button id="btn-logout2">ออก</button></header>
+    <header class="app-header">
+      <div class="header-title">🏠 HomeVault</div>
+      <div id="header-username" style="font-size: 14px; font-weight: 600;"></div>
+      <button class="btn-logout" id="btn-logout">ออก</button>
+    </header>
     <main class="main-content">
-      <div class="profile-top"><div class="avatar-big" id="profile-avatar"></div><div class="profile-info"><div id="profile-display-name"></div><div id="profile-username-text"></div></div><button class="btn-add hidden" id="btn-add-item">+ เพิ่ม</button></div>
-      <div class="items-list" id="items-list"></div>
+      <div style="margin-bottom: 16px; font-weight: 600; color: var(--text-secondary);">สมาชิกในบ้าน</div>
+      <div class="members-grid" id="members-grid"></div>
     </main>
   </div>
-  <div id="modal-item" class="modal-overlay hidden"><div class="modal-card">
-    <div class="modal-title" id="modal-title">เพิ่มรายการ</div>
-    <div class="form-group"><label>ชื่อรายการ *</label><input type="text" id="item-name"></div>
-    <div class="form-group"><label>Username</label><input type="text" id="item-username"></div>
-    <div class="form-group"><label>Password</label><input type="text" id="item-password"></div>
-    <div class="form-group"><label>หมายเหตุ</label><textarea id="item-note"></textarea></div>
-    <div class="form-group"><div class="toggle-row"><span id="visibility-label">🔒 Private</span><label class="switch"><input type="checkbox" id="item-public"><span class="slider"></span></label></div></div>
-    <div class="modal-actions"><button id="btn-cancel-item">ยกเลิก</button><button class="btn-primary" id="btn-save-item">บันทึก</button></div>
-    <button class="btn-danger hidden" id="btn-delete-item">🗑 ลบ</button>
-  </div></div>
+
+  <div id="page-profile" class="page">
+    <header class="app-header">
+      <button id="btn-back" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+      <div id="profile-header-name" class="header-title"></div>
+      <button class="btn-logout" id="btn-logout2">ออก</button>
+    </header>
+    <main class="main-content">
+      <div class="profile-top">
+        <div class="avatar-big" id="profile-avatar"></div>
+        <div class="profile-info">
+          <div id="profile-display-name" style="font-weight: 700; font-size: 18px;"></div>
+        </div>
+        <button class="btn-primary hidden" id="btn-add-item" style="width: auto; padding: 8px 16px;">+ เพิ่ม</button>
+      </div>
+      <div id="items-list"></div>
+    </main>
+  </div>
+
+  <div id="modal-item" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="font-family:'Kanit'; font-size:20px; font-weight:600; margin-bottom:20px;" id="modal-title">เพิ่มรายการ</div>
+      <div class="form-group"><label>ชื่อรายการ *</label><input type="text" id="item-name"></div>
+      <div class="form-group"><label>Username</label><input type="text" id="item-username"></div>
+      <div class="form-group"><label>Password</label><input type="text" id="item-password"></div>
+      <div class="form-group"><label>หมายเหตุ</label><textarea id="item-note"></textarea></div>
+      <div class="form-group">
+        <div class="toggle-row">
+          <span id="visibility-label">🔒 Private (เห็นคนเดียว)</span>
+          <label class="switch"><input type="checkbox" id="item-public"><span class="slider"></span></label>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn-ghost" id="btn-cancel-item" style="margin:0;">ยกเลิก</button>
+        <button class="btn-primary" id="btn-save-item">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast hidden"></div>
 </div>
-<div id="page-login" class="page">
-  <h2>เข้าสู่ระบบ</h2>
-  <button id="btn-google-login" style="background: #db4437; color: white; padding: 15px; border: none; border-radius: 8px; width: 100%;">
-    เข้าใช้งานด้วย Google
-  </button>
-  <p style="text-align: center; color: #666;">(สำหรับคนในบ้านเท่านั้น)</p>
-</div>
-
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -168,102 +184,76 @@
   function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500); }
   function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  async function init() {
-    // ตรวจสอบสถานะการล็อกอินจาก Firebase โดยตรง (ย้ายเครื่องก็ยังอยู่ถ้าใช้เมลเดิม)
-    onAuthStateChanged(auth, async (user) => {
-  // 1. ถ้าไม่มี user ล็อกอินเลย ให้ไปหน้า login ทันที
-  if (!user) {
-    showPage('page-login');
-    return;
-  }
-
-  // 2. ถ้ามี user แล้ว (กำลังโหลดข้อมูลจาก Firestore)
-  try {
-    const snap = await getDoc(doc(db, 'users', user.uid));
-    
-    if (snap.exists()) {
-      // เคส: เป็นสมาชิกเก่า -> เข้าหน้า Home
-      currentUser = { uid: user.uid, displayName: snap.data().displayName };
-      document.getElementById('header-username').textContent = currentUser.displayName;
-      showPage('page-home');
-      loadMembers();
-    } else {
-      // เคส: เพิ่งเคยล็อกอิน Google ครั้งแรก -> ให้ไปลงทะเบียนโค้ดเชิญก่อน
-      showPage('page-register');
-      document.getElementById('reg-displayname').value = user.displayName || "";
+  // ตรวจสอบสถานะล็อกอิน
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      showPage('page-login');
+      return;
     }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    showToast("เกิดข้อผิดพลาดในการโหลดข้อมูล");
-    showPage('page-login'); // ถ้าโหลดพลาดจริงๆ ให้กลับไปตั้งหลักที่หน้า login
-  }
-});
-    });
-
-    setupButtons();
-  }
-
-  function setupButtons() {
-    // ปุ่มเข้าสู่ระบบด้วย Google (ง่ายที่สุดสำหรับคนแก่)
-    document.getElementById('btn-google-login').onclick = async () => {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (e) {
-        showToast("ล็อกอินผิดพลาด: " + e.message);
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (snap.exists()) {
+        currentUser = { uid: user.uid, displayName: snap.data().displayName };
+        document.getElementById('header-username').textContent = currentUser.displayName;
+        showPage('page-home');
+        loadMembers();
+      } else {
+        showPage('page-register');
+        document.getElementById('reg-displayname').value = user.displayName || "";
       }
+    } catch (e) {
+      showPage('page-login');
+    }
+  });
+
+  // ตั้งค่าปุ่มกด
+  document.getElementById('btn-google-login').onclick = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      alert("ล็อกอินผิดพลาด: " + e.message);
+    }
+  };
+
+  document.getElementById('btn-register-confirm').onclick = async () => {
+    const inv = document.getElementById('reg-invite').value.trim().toUpperCase();
+    const d = document.getElementById('reg-displayname').value.trim();
+    if(!auth.currentUser) return showToast("กรุณาล็อกอินก่อน");
+    try {
+      const iSnap = await getDoc(doc(db, 'settings', 'inviteCodes'));
+      if(!iSnap.exists() || !iSnap.data()[inv]) throw new Error('โค้ดเชิญผิด');
+      await setDoc(doc(db, 'users', auth.currentUser.uid), { displayName: d, email: auth.currentUser.email, createdAt: Date.now() });
+      location.reload();
+    } catch(e) { showToast(e.message); }
+  };
+
+  document.getElementById('btn-logout').onclick = 
+  document.getElementById('btn-logout2').onclick = 
+  document.getElementById('btn-logout-reg').onclick = () => { auth.signOut(); location.reload(); };
+
+  document.getElementById('btn-back').onclick = () => { showPage('page-home'); loadMembers(); };
+  
+  document.getElementById('btn-add-item').onclick = () => { 
+    editingItemId = null; document.getElementById('modal-title').textContent = 'เพิ่มรายการ'; document.getElementById('modal-item').classList.remove('hidden'); 
+  };
+  document.getElementById('btn-cancel-item').onclick = () => document.getElementById('modal-item').classList.add('hidden');
+
+  document.getElementById('btn-save-item').onclick = async () => {
+    const payload = { 
+      name: document.getElementById('item-name').value, 
+      username: document.getElementById('item-username').value, 
+      password: document.getElementById('item-password').value, 
+      note: document.getElementById('item-note').value, 
+      public: document.getElementById('item-public').checked 
     };
-
-    // ปุ่มยืนยันการสมัครสมาชิก (ใช้หลังจากล็อกอิน Google ครั้งแรก)
-    document.getElementById('btn-register-confirm').onclick = async () => {
-      const inv = document.getElementById('reg-invite').value.trim().toUpperCase();
-      const d = document.getElementById('reg-displayname').value.trim();
-      
-      if(!auth.currentUser) return showToast("กรุณาล็อกอิน Google ก่อน");
-
-      try {
-        const iSnap = await getDoc(doc(db, 'settings', 'inviteCodes'));
-        if(!iSnap.exists() || !iSnap.data()[inv]) throw new Error('โค้ดเชิญผิด');
-
-        // บันทึกข้อมูลโดยใช้ UID ของ Firebase เป็นชื่อเอกสาร (ID นี้จะคงที่ตลอดไปสำหรับเมลนั้น)
-        await setDoc(doc(db, 'users', auth.currentUser.uid), {
-          displayName: d,
-          email: auth.currentUser.email,
-          createdAt: Date.now()
-        });
-        
-        showToast('ลงทะเบียนสำเร็จ!');
-        location.reload();
-      } catch(e) {
-        showToast(e.message);
-      }
-    };
-
-    document.getElementById('btn-logout').onclick = () => { auth.signOut(); location.reload(); };
-    document.getElementById('btn-back').onclick = () => { showPage('page-home'); loadMembers(); };
-    
-    document.getElementById('btn-add-item').onclick = () => { 
-      editingItemId = null; 
-      document.getElementById('modal-title').textContent = 'เพิ่มรายการ'; 
-      document.getElementById('modal-item').classList.remove('hidden'); 
-    };
-    
-    document.getElementById('btn-save-item').onclick = async () => {
-      const payload = { 
-        name: document.getElementById('item-name').value, 
-        username: document.getElementById('item-username').value, 
-        password: document.getElementById('item-password').value, 
-        note: document.getElementById('item-note').value, 
-        public: document.getElementById('item-public').checked 
-      };
-      // ใช้ currentUser.uid (ซึ่งตอนนี้คือ UID ของ Firebase) ในการเก็บไอเทม
+    try {
       const col = collection(db, 'users', currentUser.uid, 'items');
-      if(editingItemId) await updateDoc(doc(col, editingItemId), payload);
-      else { payload.createdAt = Date.now(); await addDoc(col, payload); }
-      
+      payload.createdAt = Date.now(); 
+      await addDoc(col, payload);
       document.getElementById('modal-item').classList.add('hidden');
       loadItems(currentUser.uid, true);
-    };
-  }
+    } catch(e) { alert(e.message); }
+  };
 
   async function loadMembers() {
     const grid = document.getElementById('members-grid'); grid.innerHTML = 'โหลด...';
@@ -271,45 +261,35 @@
     grid.innerHTML = '';
     snap.forEach(d => {
       const card = document.createElement('div'); card.className = 'member-card';
-      card.innerHTML = `<div class="member-avatar">${d.data().displayName[0]}</div><div>${d.data().displayName}</div>`;
+      card.innerHTML = `<div class="member-avatar">${d.data().displayName[0]}</div><div style="font-size:14px; font-weight:600;">${d.data().displayName}</div>`;
       card.onclick = () => openProfile(d.id, d.data().displayName); 
       grid.appendChild(card);
     });
   }
 
   async function openProfile(uid, name) {
-    viewingUid = uid; 
-    const isOwner = currentUser && currentUser.uid === uid;
+    viewingUid = uid; const isOwner = currentUser && currentUser.uid === uid;
     document.getElementById('profile-header-name').textContent = name;
     document.getElementById('profile-display-name').textContent = name;
     document.getElementById('profile-avatar').textContent = name[0];
-    
     if(isOwner) document.getElementById('btn-add-item').classList.remove('hidden'); 
     else document.getElementById('btn-add-item').classList.add('hidden');
-    
-    showPage('page-profile'); 
-    loadItems(uid, isOwner);
+    showPage('page-profile'); loadItems(uid, isOwner);
   }
 
   async function loadItems(uid, isOwner) {
     const list = document.getElementById('items-list'); list.innerHTML = 'โหลด...';
     let q = query(collection(db, 'users', uid, 'items'), orderBy('createdAt', 'desc'));
     if(!isOwner) q = query(collection(db, 'users', uid, 'items'), where('public', '==', true));
-    
-    const snap = await getDocs(q); 
-    list.innerHTML = '';
+    const snap = await getDocs(q); list.innerHTML = '';
     snap.forEach(d => {
-      const item = d.data(); 
-      const card = document.createElement('div'); card.className = 'item-card';
+      const item = d.data(); const card = document.createElement('div'); card.className = 'item-card';
       card.innerHTML = `<div class="item-header"><b>${esc(item.name)}</b></div>
-                        <div>User: ${esc(item.username)}</div>
-                        <div>Pass: ${esc(item.password)}</div>`;
+                        <div style="font-size:13px; color:var(--text-secondary);">User: ${esc(item.username)}</div>
+                        <div style="font-size:13px; color:var(--text-secondary);">Pass: ${esc(item.password)}</div>`;
       list.appendChild(card);
     });
   }
-
-  init();
 </script>
-
 </body>
 </html>
