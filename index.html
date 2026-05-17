@@ -209,6 +209,12 @@
       showToast("บันทึกแล้ว");
       loadItems(currentUser.uid, true);
     } catch(e) { alert(e.message); }
+          // ล้างค่าในช่องพิมพ์หลังจากบันทึกเสร็จ
+      document.getElementById('item-name').value = '';
+      document.getElementById('item-username').value = '';
+      document.getElementById('item-password').value = '';
+      document.getElementById('item-note').value = '';
+      document.getElementById('item-public').checked = false;
   };
 
   async function loadMembers() {
@@ -233,17 +239,25 @@
     showPage('page-profile'); loadItems(uid, isOwner);
   }
 
-  async function loadItems(uid, isOwner) {
+    async function loadItems(uid, isOwner) {
     const list = document.getElementById('items-list'); list.innerHTML = '...';
     let q = query(collection(db, 'users', uid, 'items'), orderBy('createdAt', 'desc'));
     if(!isOwner) q = query(collection(db, 'users', uid, 'items'), where('public', '==', true));
     const snap = await getDocs(q); list.innerHTML = '';
     snap.forEach(d => {
       const item = d.data(); const card = document.createElement('div'); card.className = 'item-card';
-      card.innerHTML = `<b>${esc(item.name)}</b><br><small>U: ${esc(item.username)} | P: ${esc(item.password)}</small>`;
+      
+      // เพิ่มบรรทัดนี้: เช็คว่าถ้ามี note ให้สร้างข้อความหมายเหตุ ถ้าไม่มีให้ปล่อยว่าง
+      const noteHtml = item.note ? `<div style="font-size:12px; color:var(--accent); margin-top:4px; border-top:1px dashed var(--border); padding-top:4px;">📝 ${esc(item.note)}</div>` : '';
+
+      card.innerHTML = `<div class="item-header"><b>${esc(item.name)}</b></div>
+                        <div style="font-size:13px; color:var(--text-secondary);">User: ${esc(item.username)}</div>
+                        <div style="font-size:13px; color:var(--text-secondary);">Pass: ${esc(item.password)}</div>
+                        ${noteHtml}`; // เอาตัวแปรโน้ตมาแปะท้ายตรงนี้
       list.appendChild(card);
     });
   }
+
 </script>
 </body>
 </html>
